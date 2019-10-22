@@ -76,6 +76,8 @@ object FlightStream extends App {
     $"FLIGHT_system.updated".as("updated")
   )
 
+  flightReceived.cache()
+
   val beforeExecution = java.lang.System.currentTimeMillis()
 
   val totalFlight = flightReceived.count()
