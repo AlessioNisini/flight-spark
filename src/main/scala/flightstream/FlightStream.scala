@@ -1,6 +1,6 @@
 package flightstream
 
-import org.apache.spark.sql.{DataFrame, Dataset, Encoder, RelationalGroupedDataset, SparkSession}
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 
 object FlightStream extends App {
@@ -80,7 +80,9 @@ object FlightStream extends App {
 
   val totalFlight = flightReceived.count()
 
-  val totalAirline = flightReceived.groupBy($"airline.codeAirline").count().count()
+  //  val totalAirline = flightReceived.as[FlightReceived].map(_.airline.codeAirline).distinct().count()   // 3141
+  //  val totalAirline = flightReceived.groupBy($"airline.codeAirline").count().count()  //2000
+  val totalAirline = flightReceived.select(countDistinct($"airline.codeAirline")).first().getLong(0)  //2362
 
   val topDeparture =
     flightReceived
