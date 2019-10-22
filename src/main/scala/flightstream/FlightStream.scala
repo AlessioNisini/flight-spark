@@ -1,30 +1,36 @@
 package flightstream
 
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, Dataset, Encoder, RelationalGroupedDataset, SparkSession}
 import org.apache.spark.sql.functions._
 
 object FlightStream extends App {
 
   val spark = SparkSession.builder.master("local[*]").appName("Simple Application").getOrCreate()
 
+  spark.conf.set("spark.sql.shuffle.partitions", "5")
   spark.sparkContext.setLogLevel("WARN")
 
   import spark.implicits._
   import CustomImplicits._
 
+  val beforeLoading = java.lang.System.currentTimeMillis()
+
   val flight = spark.readAndLoadJson("flights.json")
+  val airport = spark.readAndLoadJson("airportDatabase.json")
+  val airline = spark.readAndLoadJson("airlineDatabase.json")
+  val airplane = spark.readAndLoadJson("airplaneDatabase.json")
+
+  val beforePlanning = java.lang.System.currentTimeMillis()
+
   val flightFiltered = flight.filter($"status" === "en-route" && !($"departure.iataCode" === "" || $"arrival.iataCode" === ""))
   val flightPrefixed = flightFiltered.addPrefix("FLIGHT")
 
-  val airport = spark.readAndLoadJson("airportDatabase.json")
   val departureAirportPrefixed = airport.addPrefix("DEPARTURE")
   val arrivalAirportPrefixed = airport.addPrefix("ARRIVAL")
 
-  val airline = spark.readAndLoadJson("airlineDatabase.json")
   val airlineFiltered = airline.filter($"statusAirline" === "active")
   val airlinePrefixed = airlineFiltered.addPrefix("AIRLINE")
 
-  val airplane = spark.readAndLoadJson("airplaneDatabase.json")
   val airplaneUpdated = airplane.withColumn("numberRegistration", regexp_replace($"numberRegistration", "-", ""))
   val airplanePrefixed = airplaneUpdated.addPrefix("AIRPLANE")
 
@@ -41,7 +47,7 @@ object FlightStream extends App {
     $"FLIGHT_geography".removePrefix,
     $"FLIGHT_speed.horizontal".as("speed"),
     struct(
-      $"DEPARTURE_codeIcaoAirport".removePrefix,
+      $"DEPARTURE_codeIcaoAirport".as("codeAirport"),
       $"DEPARTURE_nameAirport".removePrefix,
       $"DEPARTURE_nameCountry".removePrefix,
       $"DEPARTURE_codeIso2Country".removePrefix,
@@ -49,7 +55,7 @@ object FlightStream extends App {
       $"DEPARTURE_GMT".removePrefix,
     ).as("airportDeparture"),
     struct(
-      $"ARRIVAL_codeIcaoAirport".removePrefix,
+      $"ARRIVAL_codeIcaoAirport".as("codeAirport"),
       $"ARRIVAL_nameAirport".removePrefix,
       $"ARRIVAL_nameCountry".removePrefix,
       $"ARRIVAL_codeIso2Country".removePrefix,
@@ -57,7 +63,7 @@ object FlightStream extends App {
       $"ARRIVAL_GMT".removePrefix,
     ).as("airportArrival"),
     struct(
-      $"AIRLINE_codeIcaoAirline".removePrefix,
+      $"AIRLINE_codeIcaoAirline".as("codeAirline"),
       $"AIRLINE_nameAirline".removePrefix,
       $"AIRLINE_sizeAirline".removePrefix
     ).as("airline"),
@@ -70,8 +76,52 @@ object FlightStream extends App {
     $"FLIGHT_system.updated".as("updated")
   )
 
-  flightReceived.printSchema()
-  flightReceived.show()
+  val beforeExecution = java.lang.System.currentTimeMillis()
+
+  val totalFlight = flightReceived.count()
+
+  val totalAirline = flightReceived.groupBy($"airline.codeAirline").count().count()
+
+  val topDeparture =
+    flightReceived
+      .groupBy($"airportDeparture.codeAirport")
+      .count()
+      .sort($"count".desc)
+      .limit(5)
+      .collect()
+      .toList
+
+  val topArrival =
+    flightReceived
+      .groupBy($"airportArrival.codeAirport")
+      .count()
+      .sort($"count".desc)
+      .limit(5)
+      .collect()
+      .toList
+
+  val topAirline =
+    flightReceived
+      .groupBy($"airline.nameAirline")
+      .count()
+      .sort($"count".desc)
+      .limit(5)
+      .collect()
+      .toList
+
+  val topSpeed =
+    flightReceived
+      .select($"icaoNumber", $"speed")
+      .sort($"speed".desc)
+      .limit(5)
+      .collect()
+      .toList
+
+  val afterExecution = java.lang.System.currentTimeMillis()
+
+  println(s"Loading Time: ${beforePlanning - beforeLoading}")
+  println(s"Planning Time: ${beforeExecution - beforePlanning}")
+  println(s"Execution Time: ${afterExecution - beforeExecution}")
 
   spark.stop()
 
