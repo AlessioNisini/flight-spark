@@ -11,7 +11,6 @@ case class TopDeparture(code: String, count: BigInt) extends Output
 case class TopArrival(code: String, count: BigInt) extends Output
 case class TopAirline(name: String, count: BigInt) extends Output
 case class TopSpeed(code: String, speed: Double) extends Output
-case class OutputMessage(message: List[Output])
 
 trait FlightStreamJsonProtocol extends DefaultJsonProtocol {
   implicit val flightRequest: RootJsonFormat[FlightRequest] = jsonFormat2(FlightRequest)
@@ -43,5 +42,4 @@ trait FlightStreamJsonProtocol extends DefaultJsonProtocol {
       }
     }
   }
-  implicit val outputMessage: RootJsonFormat[OutputMessage] = jsonFormat1(OutputMessage)
 }
