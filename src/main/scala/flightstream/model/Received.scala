@@ -1,4 +1,4 @@
-package flightstream
+package flightstream.model
 
 final case class FlightReceived(
   iataNumber: String,

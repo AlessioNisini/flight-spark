@@ -1,4 +1,4 @@
-package flightstream
+package flightstream.spark
 
 import org.apache.spark.sql.{Column, DataFrame, SparkSession}
 
