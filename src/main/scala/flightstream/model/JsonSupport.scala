@@ -2,7 +2,7 @@ package flightstream.model
 
 import spray.json._
 
-final case class FlightRequest(source: String, limit: Int)
+final case class FlightRequest(requestType: String, limit: Int)
 
 sealed trait OutputMessage extends Product
 final case class TotalFlight(count: BigInt) extends OutputMessage

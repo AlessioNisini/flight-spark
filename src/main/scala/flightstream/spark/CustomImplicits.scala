@@ -4,9 +4,6 @@ import org.apache.spark.sql.{Column, DataFrame, SparkSession}
 
 object CustomImplicits {
 
-  final val SEPARATOR = '_'
-  final val PATH_PREFIX = "src/main/resources/flightstream"
-
   class RemovePrefix(col: Column, separator: Char) {
     def removePrefix: Column =
       if(col.toString.contains(separator))
@@ -22,11 +19,11 @@ object CustomImplicits {
 
   class ReadAndLoadJson(spark: SparkSession) {
     def readAndLoadJson(path: String): DataFrame =
-      spark.read.format("json").option("multiLine", true).load(s"$PATH_PREFIX/$path")
+      spark.read.format("json").option("multiLine", true).load(s"src/main/resources/flightstream/$path")
   }
 
-  implicit def removeColumnPrefix(col: Column): RemovePrefix = new RemovePrefix(col, SEPARATOR)
-  implicit def addDataFramePrefix(df: DataFrame): AddPrefix = new AddPrefix(df, SEPARATOR)
+  implicit def removeColumnPrefix(col: Column): RemovePrefix = new RemovePrefix(col, '_')
+  implicit def addDataFramePrefix(df: DataFrame): AddPrefix = new AddPrefix(df, '_')
   implicit def loadJson(spark: SparkSession): ReadAndLoadJson = new ReadAndLoadJson(spark)
 
 }

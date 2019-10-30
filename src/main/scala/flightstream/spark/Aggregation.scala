@@ -5,7 +5,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions.{countDistinct, regexp_replace, struct}
 import org.apache.spark.sql.types.IntegerType
 
-object FlightStream {
+object Aggregation {
 
   val spark: SparkSession = SparkSession.builder.master("local[*]").appName("Flight Stream").getOrCreate()
   spark.conf.set("spark.sql.shuffle.partitions", "5")
@@ -16,15 +16,18 @@ object FlightStream {
   val flightReceived: DataFrame = buildFlightReceived
 
   def getTotalFlight: OutputMessage = {
-    TotalFlight(flightReceived.count())
+    TotalFlight(
+      flightReceived.count()
+    )
   }
 
   def getTotalAirline: OutputMessage = {
-    val result = flightReceived
-      .select(countDistinct($"airline.codeAirline"))
-      .first()
-      .getLong(0)
-    TotalAirline(result)
+    TotalAirline(
+      flightReceived
+        .select(countDistinct($"airline.codeAirline"))
+        .first()
+        .getLong(0)
+    )
   }
 
   def getTopDeparture(n: Int): List[OutputMessage] = {
