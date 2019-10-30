@@ -7,29 +7,71 @@ import org.apache.spark.sql.types.IntegerType
 
 object FlightStream {
 
-  def init(): SparkSession = {
-    val spark = SparkSession.builder.master("local[*]").appName("Flight Stream").getOrCreate()
-    spark.conf.set("spark.sql.shuffle.partitions", "5")
-    spark.sparkContext.setLogLevel("WARN")
-    spark
+  val spark: SparkSession = SparkSession.builder.master("local[*]").appName("Flight Stream").getOrCreate()
+  spark.conf.set("spark.sql.shuffle.partitions", "5")
+  spark.sparkContext.setLogLevel("WARN")
+
+  import spark.implicits._
+
+  val flightReceived: DataFrame = buildFlightReceived
+
+  def getTotalFlight: OutputMessage = {
+    TotalFlight(flightReceived.count())
   }
 
-  def run(req: FlightRequest)(implicit spark: SparkSession): List[Output] = {
-    val flightReceived = buildFlightReceived(spark)
-    val result = req match {
-      case FlightRequest(source, _) if source == "totalFlight" => getTotalFlight(flightReceived)
-      case FlightRequest(source, _) if source == "totalAirline" => getTotalAirline(flightReceived)
-      case FlightRequest(source, limit) if source == "topDeparture" => getTopDeparture(flightReceived, limit)
-      case FlightRequest(source, limit) if source == "topArrival" => getTopArrival(flightReceived, limit)
-      case FlightRequest(source, limit) if source == "topAirline" => getTopAirline(flightReceived, limit)
-      case FlightRequest(source, limit) if source == "topSpeed" => getTopSpeed(flightReceived, limit)
-    }
-    result
+  def getTotalAirline: OutputMessage = {
+    val result = flightReceived
+      .select(countDistinct($"airline.codeAirline"))
+      .first()
+      .getLong(0)
+    TotalAirline(result)
   }
 
-  def buildFlightReceived(spark: SparkSession): DataFrame = {
+  def getTopDeparture(n: Int): List[OutputMessage] = {
+    flightReceived
+      .groupBy($"airportDeparture.codeAirport".as("code"))
+      .count()
+      .sort($"count".desc)
+      .limit(n)
+      .as[TopDeparture]
+      .collect()
+      .toList
+  }
 
-    import spark.implicits._
+  def getTopArrival(n: Int): List[OutputMessage] = {
+    flightReceived
+      .groupBy($"airportArrival.codeAirport".as("code"))
+      .count()
+      .sort($"count".desc)
+      .limit(n)
+      .as[TopArrival]
+      .collect()
+      .toList
+  }
+
+  def getTopAirline(n: Int): List[OutputMessage] = {
+    flightReceived
+      .groupBy($"airline.nameAirline".as("name"))
+      .count()
+      .sort($"count".desc)
+      .limit(n)
+      .as[TopAirline]
+      .collect()
+      .toList
+  }
+
+  def getTopSpeed(n: Int): List[OutputMessage] = {
+    flightReceived
+      .select($"icaoNumber".as("code"), $"speed".cast(IntegerType))
+      .sort($"speed".desc)
+      .limit(n)
+      .as[TopSpeed]
+      .collect()
+      .toList
+  }
+
+  private def buildFlightReceived: DataFrame = {
+
     import CustomImplicits._
 
     val flight = spark.readAndLoadJson("flights.json")
@@ -95,69 +137,6 @@ object FlightStream {
 
     flightReceived
 
-  }
-
-  def getTotalFlight(flightReceived: DataFrame): List[Output] = {
-    List(TotalFlight(flightReceived.count()))
-  }
-
-  def getTotalAirline(flightReceived: DataFrame)(implicit spark: SparkSession): List[Output] = {
-    import spark.implicits._
-    val result = flightReceived
-      .select(countDistinct($"airline.codeAirline"))
-      .first()
-      .getLong(0)
-    List(TotalAirline(result))
-  }
-
-  def getTopDeparture(flightReceived: DataFrame, n: Int)(implicit spark: SparkSession): List[Output] = {
-    import spark.implicits._
-    flightReceived
-      .groupBy($"airportDeparture.codeAirport".as("code"))
-      .count()
-      .sort($"count".desc)
-      .limit(n)
-      .as[TopDeparture]
-      .collect()
-      .toList
-  }
-
-  def getTopArrival(flightReceived: DataFrame, n: Int)(implicit spark: SparkSession): List[Output] = {
-    import spark.implicits._
-    flightReceived
-      .groupBy($"airportArrival.codeAirport".as("code"))
-      .count()
-      .sort($"count".desc)
-      .limit(n)
-      .as[TopArrival]
-      .collect()
-      .toList
-  }
-
-  def getTopAirline(flightReceived: DataFrame, n: Int)(implicit spark: SparkSession): List[Output] = {
-    import spark.implicits._
-    flightReceived
-      .groupBy($"airline.nameAirline".as("name"))
-      .count()
-      .sort($"count".desc)
-      .limit(n)
-      .as[TopAirline]
-      .collect()
-      .toList
-  }
-
-  def getTopSpeed(flightReceived: DataFrame, n: Int)(implicit spark: SparkSession): List[Output] = {
-    import spark.implicits._
-    flightReceived
-      .select(
-        $"icaoNumber".as("code"),
-        $"speed".cast(IntegerType)
-      )
-      .sort($"speed".desc)
-      .limit(n)
-      .as[TopSpeed]
-      .collect()
-      .toList
   }
 
 }

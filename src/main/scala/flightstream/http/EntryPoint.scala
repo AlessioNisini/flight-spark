@@ -7,22 +7,24 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import flightstream.model._
 import flightstream.spark.FlightStream._
-import org.apache.spark.sql.SparkSession
 
 object EntryPoint extends App with FlightStreamJsonProtocol with SprayJsonSupport {
 
   implicit val system: ActorSystem = ActorSystem("FlightStream")
   implicit val mat: ActorMaterializer = ActorMaterializer()
 
-  implicit val spark: SparkSession = init()
-
   val route =
     (pathPrefix("flightstream") & pathEndOrSingleSlash) {
       get {
         complete("Welcome")
       } ~
-        (post & entity(as[FlightRequest])) { req =>
-          complete(run(req))
+        (post & entity(as[FlightRequest])) {
+          case FlightRequest(source, _) if source == "totalFlight" => complete(getTotalFlight)
+          case FlightRequest(source, _) if source == "totalAirline" => complete(getTotalAirline)
+          case FlightRequest(source, limit) if source == "topDeparture" => complete(getTopDeparture(limit))
+          case FlightRequest(source, limit) if source == "topArrival" => complete(getTopArrival(limit))
+          case FlightRequest(source, limit) if source == "topAirline" => complete(getTopAirline(limit))
+          case FlightRequest(source, limit) if source == "topSpeed" => complete(getTopSpeed(limit))
         }
     }
 
