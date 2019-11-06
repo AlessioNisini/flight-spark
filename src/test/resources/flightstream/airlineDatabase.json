@@ -1,0 +1,34 @@
+[
+  {
+    "airlineId": "1",
+    "nameAirline": "American Airlines",
+    "codeIataAirline": "AA",
+    "iataPrefixAccounting": "1",
+    "codeIcaoAirline": "AAL",
+    "callsign": "AMERICAN",
+    "type": "scheduled",
+    "statusAirline": "active",
+    "sizeAirline": "963",
+    "ageFleet": "10.9",
+    "founding": "1934",
+    "codeHub": "DFW",
+    "nameCountry": "United States",
+    "codeIso2Country": "US"
+  },
+  {
+    "airlineId": "2",
+    "nameAirline": "Delta Air Lines",
+    "codeIataAirline": "DL",
+    "iataPrefixAccounting": "6",
+    "codeIcaoAirline": "DAL",
+    "callsign": "DELTA",
+    "type": "scheduled,division",
+    "statusAirline": "active",
+    "sizeAirline": "823",
+    "ageFleet": "17",
+    "founding": "1928",
+    "codeHub": "ATL",
+    "nameCountry": "United States",
+    "codeIso2Country": "US"
+  }
+]
