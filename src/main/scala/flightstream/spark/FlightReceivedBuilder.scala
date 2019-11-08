@@ -1,20 +1,21 @@
 package flightstream.spark
 
 import flightstream.model.{RawData, RawPrefixedData}
-import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.{regexp_replace, struct}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
-object FlightReceivedBuilder extends SparkSessionWrapper {
+class FlightReceivedBuilder(implicit spark: SparkSession) {
 
-  import spark.implicits._
   import CustomImplicits._
+  import spark.implicits._
 
-  def loadData(
-    flightPath: String,
-    airportPath: String,
-    airlinePath: String,
-    airplanePath: String
-  ) : RawData = {
+  def build(flightPath: String, airportPath: String, airlinePath: String, airplanePath: String): DataFrame = {
+    val rawData = loadData(flightPath, airportPath, airlinePath, airplanePath)
+    val rawPrefixedData = transformData(rawData)
+    enrichData(rawPrefixedData)
+  }
+
+  private def loadData(flightPath: String, airportPath: String, airlinePath: String, airplanePath: String) : RawData = {
     RawData(
       spark.readAndLoadJson(flightPath),
       spark.readAndLoadJson(airportPath),
@@ -23,7 +24,7 @@ object FlightReceivedBuilder extends SparkSessionWrapper {
     )
   }
 
-  def transformData(rawData: RawData): RawPrefixedData = {
+  private def transformData(rawData: RawData): RawPrefixedData = {
 
     val flightFiltered = rawData.flight.filter($"status" === "en-route" && !($"departure.iataCode" === "" || $"arrival.iataCode" === ""))
     val flightPrefixed = flightFiltered.addPrefix("FLIGHT")
@@ -42,7 +43,7 @@ object FlightReceivedBuilder extends SparkSessionWrapper {
 
   }
 
-  def buildFlightReceived(rawPrefixedData: RawPrefixedData): DataFrame = {
+  private def enrichData(rawPrefixedData: RawPrefixedData): DataFrame = {
 
     val bigFlights =
       rawPrefixedData.flight
@@ -57,7 +58,7 @@ object FlightReceivedBuilder extends SparkSessionWrapper {
       $"FLIGHT_geography".removePrefix,
       $"FLIGHT_speed.horizontal".as("speed"),
       struct(
-        $"DEPARTURE_codeIcaoAirport".as("codeAirport"),
+        $"DEPARTURE_codeIataAirport".as("codeAirport"),
         $"DEPARTURE_nameAirport".removePrefix,
         $"DEPARTURE_nameCountry".removePrefix,
         $"DEPARTURE_codeIso2Country".removePrefix,
@@ -65,7 +66,7 @@ object FlightReceivedBuilder extends SparkSessionWrapper {
         $"DEPARTURE_GMT".removePrefix,
       ).as("airportDeparture"),
       struct(
-        $"ARRIVAL_codeIcaoAirport".as("codeAirport"),
+        $"ARRIVAL_codeIataAirport".as("codeAirport"),
         $"ARRIVAL_nameAirport".removePrefix,
         $"ARRIVAL_nameCountry".removePrefix,
         $"ARRIVAL_codeIso2Country".removePrefix,

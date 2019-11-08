@@ -1,165 +1,288 @@
 [
   {
     "geography": {
-      "latitude": 45.725,
-      "longitude": 15.6764,
-      "altitude": 10980.4,
-      "direction": 306.9
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0,
+      "direction": 0
     },
     "speed": {
-      "horizontal": 752.652,
-      "isGround": 0,
-      "vertical": 1.188
-    },
-    "departure": {
-      "iataCode": "AAE",
-      "icaoCode": "DABB"
-    },
-    "arrival": {
-      "iataCode": "AAC",
-      "icaoCode": "HEAR"
-    },
-    "aircraft": {
-      "regNumber": "YRBAC",
-      "icaoCode": "A320",
-      "icao24": "",
-      "iataCode": "A320"
-    },
-    "airline": {
-      "iataCode": "AA",
-      "icaoCode": "AAL"
-    },
-    "flight": {
-      "iataNumber": "EW7UG",
-      "icaoNumber": "EWG7UG",
-      "number": "7UG"
-    },
-    "system": {
-      "updated": "1571320610",
-      "squawk": "1753"
-    },
-    "status": "en-route"
-  },
-  {
-    "geography": {
-      "latitude": 41.4134,
-      "longitude": -77.2774,
-      "altitude": 9448.8,
-      "direction": 101.07
-    },
-    "speed": {
-      "horizontal": 858.636,
+      "horizontal": 0,
       "isGround": 0,
       "vertical": 0
     },
     "departure": {
-      "iataCode": "AAB",
-      "icaoCode": "YARY"
+      "iataCode": "A",
+      "icaoCode": ""
     },
     "arrival": {
-      "iataCode": "AAA",
-      "icaoCode": "NTGA"
+      "iataCode": "B",
+      "icaoCode": ""
     },
     "aircraft": {
-      "regNumber": "YR-BAF",
-      "icaoCode": "B738",
-      "icao24": "AAF617",
-      "iataCode": "B738"
-    },
-    "airline": {
-      "iataCode": "DAL",
-      "icaoCode": "SCX"
-    },
-    "flight": {
-      "iataNumber": "SY233",
-      "icaoNumber": "SCX233",
-      "number": "233"
-    },
-    "system": {
-      "updated": "1571320610",
-      "squawk": "6277"
-    },
-    "status": "en-route"
-  },
-  {
-    "geography": {
-      "latitude": 45.725,
-      "longitude": 15.6764,
-      "altitude": 10980.4,
-      "direction": 306.9
-    },
-    "speed": {
-      "horizontal": 752.652,
-      "isGround": 0,
-      "vertical": 1.188
-    },
-    "departure": {
-      "iataCode": "AAE",
-      "icaoCode": "DABB"
-    },
-    "arrival": {
-      "iataCode": "AAC",
-      "icaoCode": "HEAR"
-    },
-    "aircraft": {
-      "regNumber": "YRBAC",
-      "icaoCode": "A320",
+      "regNumber": "A",
+      "icaoCode": "",
       "icao24": "",
-      "iataCode": "A320"
+      "iataCode": ""
     },
     "airline": {
-      "iataCode": "AA",
-      "icaoCode": "AAL"
+      "iataCode": "",
+      "icaoCode": "A"
     },
     "flight": {
-      "iataNumber": "OUIO9",
-      "icaoNumber": "EWG7UG",
-      "number": "7UG"
+      "iataNumber": "",
+      "icaoNumber": "",
+      "number": ""
     },
     "system": {
-      "updated": "1571320610",
-      "squawk": "1753"
+      "updated": "",
+      "squawk": ""
     },
     "status": "en-route"
   },
   {
     "geography": {
-      "latitude": 41.4134,
-      "longitude": -77.2774,
-      "altitude": 9448.8,
-      "direction": 101.07
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0,
+      "direction": 0
     },
     "speed": {
-      "horizontal": 858.636,
+      "horizontal": 0,
       "isGround": 0,
       "vertical": 0
     },
     "departure": {
-      "iataCode": "AAB",
-      "icaoCode": "YARY"
+      "iataCode": "B",
+      "icaoCode": ""
     },
     "arrival": {
-      "iataCode": "AAA",
-      "icaoCode": "NTGA"
+      "iataCode": "C",
+      "icaoCode": ""
     },
     "aircraft": {
-      "regNumber": "YR-BAF",
-      "icaoCode": "B738",
-      "icao24": "AAF617",
-      "iataCode": "B738"
+      "regNumber": "B",
+      "icaoCode": "",
+      "icao24": "",
+      "iataCode": ""
     },
     "airline": {
-      "iataCode": "DAL",
-      "icaoCode": "SCX"
+      "iataCode": "",
+      "icaoCode": "B"
     },
     "flight": {
-      "iataNumber": "BAERS",
-      "icaoNumber": "SCX233",
-      "number": "233"
+      "iataNumber": "",
+      "icaoNumber": "",
+      "number": ""
     },
     "system": {
-      "updated": "1571320610",
-      "squawk": "6277"
+      "updated": "",
+      "squawk": ""
+    },
+    "status": "en-route"
+  },
+  {
+    "geography": {
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0,
+      "direction": 0
+    },
+    "speed": {
+      "horizontal": 0,
+      "isGround": 0,
+      "vertical": 0
+    },
+    "departure": {
+      "iataCode": "C",
+      "icaoCode": ""
+    },
+    "arrival": {
+      "iataCode": "A",
+      "icaoCode": ""
+    },
+    "aircraft": {
+      "regNumber": "C",
+      "icaoCode": "",
+      "icao24": "",
+      "iataCode": ""
+    },
+    "airline": {
+      "iataCode": "",
+      "icaoCode": "A"
+    },
+    "flight": {
+      "iataNumber": "",
+      "icaoNumber": "",
+      "number": ""
+    },
+    "system": {
+      "updated": "",
+      "squawk": ""
+    },
+    "status": "en-route"
+  },
+  {
+    "geography": {
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0,
+      "direction": 0
+    },
+    "speed": {
+      "horizontal": 0,
+      "isGround": 0,
+      "vertical": 0
+    },
+    "departure": {
+      "iataCode": "A",
+      "icaoCode": ""
+    },
+    "arrival": {
+      "iataCode": "C",
+      "icaoCode": ""
+    },
+    "aircraft": {
+      "regNumber": "A",
+      "icaoCode": "",
+      "icao24": "",
+      "iataCode": ""
+    },
+    "airline": {
+      "iataCode": "",
+      "icaoCode": "B"
+    },
+    "flight": {
+      "iataNumber": "",
+      "icaoNumber": "",
+      "number": ""
+    },
+    "system": {
+      "updated": "",
+      "squawk": ""
+    },
+    "status": "en-route"
+  },
+  {
+    "geography": {
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0,
+      "direction": 0
+    },
+    "speed": {
+      "horizontal": 0,
+      "isGround": 0,
+      "vertical": 0
+    },
+    "departure": {
+      "iataCode": "B",
+      "icaoCode": ""
+    },
+    "arrival": {
+      "iataCode": "A",
+      "icaoCode": ""
+    },
+    "aircraft": {
+      "regNumber": "C",
+      "icaoCode": "",
+      "icao24": "",
+      "iataCode": ""
+    },
+    "airline": {
+      "iataCode": "",
+      "icaoCode": "A"
+    },
+    "flight": {
+      "iataNumber": "",
+      "icaoNumber": "",
+      "number": ""
+    },
+    "system": {
+      "updated": "",
+      "squawk": ""
+    },
+    "status": "en-route"
+  },
+  {
+    "geography": {
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0,
+      "direction": 0
+    },
+    "speed": {
+      "horizontal": 0,
+      "isGround": 0,
+      "vertical": 0
+    },
+    "departure": {
+      "iataCode": "C",
+      "icaoCode": ""
+    },
+    "arrival": {
+      "iataCode": "B",
+      "icaoCode": ""
+    },
+    "aircraft": {
+      "regNumber": "B",
+      "icaoCode": "",
+      "icao24": "",
+      "iataCode": ""
+    },
+    "airline": {
+      "iataCode": "",
+      "icaoCode": "B"
+    },
+    "flight": {
+      "iataNumber": "",
+      "icaoNumber": "",
+      "number": ""
+    },
+    "system": {
+      "updated": "",
+      "squawk": ""
+    },
+    "status": "en-route"
+  },
+  {
+    "geography": {
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0,
+      "direction": 0
+    },
+    "speed": {
+      "horizontal": 0,
+      "isGround": 0,
+      "vertical": 0
+    },
+    "departure": {
+      "iataCode": "A",
+      "icaoCode": ""
+    },
+    "arrival": {
+      "iataCode": "B",
+      "icaoCode": ""
+    },
+    "aircraft": {
+      "regNumber": "A",
+      "icaoCode": "",
+      "icao24": "",
+      "iataCode": ""
+    },
+    "airline": {
+      "iataCode": "",
+      "icaoCode": "C"
+    },
+    "flight": {
+      "iataNumber": "",
+      "icaoNumber": "",
+      "number": ""
+    },
+    "system": {
+      "updated": "",
+      "squawk": ""
     },
     "status": "en-route"
   }

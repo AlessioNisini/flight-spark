@@ -1,11 +1,11 @@
 package flightstream.spark
 
 import flightstream.model._
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions.countDistinct
 import org.apache.spark.sql.types.IntegerType
 
-object Aggregator extends SparkSessionWrapper {
+class Aggregator(implicit spark: SparkSession){
 
   import spark.implicits._
 

@@ -4,7 +4,8 @@ import akka.http.scaladsl.model.{HttpEntity, HttpResponse, StatusCodes}
 
 object Constants {
 
-  final val FILE_ROOT_PATH = "src/main/resources/flightstream"
+  final val MAIN_ROOT_PATH = "src/main/resources/flightstream"
+  final val TEST_ROOT_PATH = "src/test/resources/flightstream"
 
   final val WELCOME_MESSAGE =
     """
