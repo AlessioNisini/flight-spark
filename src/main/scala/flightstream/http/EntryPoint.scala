@@ -4,25 +4,22 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import flightstream.http.Constants._
-import flightstream.spark.FlightReceivedBuilder._
-import flightstream.spark.SparkSessionWrapper
+import flightstream.spark.{Aggregator, FlightReceivedBuilder}
 
-object EntryPoint extends App with FlightRoutes with SparkSessionWrapper {
+object EntryPoint extends App with SparkSessionWrapper {
 
   implicit val system: ActorSystem = ActorSystem("FlightStream")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
-  val rawData = loadData(
-    s"$FILE_ROOT_PATH/flights.json",
-    s"$FILE_ROOT_PATH/airportDatabase.json",
-    s"$FILE_ROOT_PATH/airlineDatabase.json",
-    s"$FILE_ROOT_PATH/airplaneDatabase.json"
+  val flightReceived = new FlightReceivedBuilder().build(
+    s"$MAIN_ROOT_PATH/flights.json",
+    s"$MAIN_ROOT_PATH/airportDatabase.json",
+    s"$MAIN_ROOT_PATH/airlineDatabase.json",
+    s"$MAIN_ROOT_PATH/airplaneDatabase.json"
   )
+  val aggregator = new Aggregator(flightReceived)
+  val routes = new FlightRoutes(aggregator).routes
 
-  val rawPrefixedData = transformData(rawData)
-
-  val flightReceived = buildFlightReceived(rawPrefixedData)
-
-  Http().bindAndHandle(routes(flightReceived), HOST_NAME, PORT_NUMBER)
+  Http().bindAndHandle(routes, HOST_NAME, PORT_NUMBER)
 
 }
