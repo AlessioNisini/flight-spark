@@ -4,6 +4,8 @@ import akka.http.scaladsl.model.{HttpEntity, HttpResponse, StatusCodes}
 
 object Constants {
 
+  final val FILE_ROOT_PATH = "src/main/resources/flightstream"
+
   final val WELCOME_MESSAGE =
     """
       |Welcome...
@@ -19,7 +21,7 @@ object Constants {
 
   final val HOST_NAME = "localhost"
   final val PORT_NUMBER = 8080
-  final val ROOT_PATH = "flightstream"
+  final val PREFIX_PATH = "flightstream"
 
   final val TOTAL_FLIGHT_REQUEST = "totalFlight"
   final val TOTAL_AIRLINE_REQUEST = "totalAirline"

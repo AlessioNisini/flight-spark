@@ -1,20 +1,21 @@
 package flightstream.spark
 
 import flightstream.model._
+import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.countDistinct
 import org.apache.spark.sql.types.IntegerType
 
-object Aggregation extends SparkSessionWrapper {
+object Aggregator extends SparkSessionWrapper {
 
   import spark.implicits._
 
-  def getTotalFlight: OutputMessage = {
+  def getTotalFlight(flightReceived: DataFrame): OutputMessage = {
     TotalFlight(
       flightReceived.count()
     )
   }
 
-  def getTotalAirline: OutputMessage = {
+  def getTotalAirline(flightReceived: DataFrame): OutputMessage = {
     TotalAirline(
       flightReceived
         .select(countDistinct($"airline.codeAirline"))
@@ -23,7 +24,7 @@ object Aggregation extends SparkSessionWrapper {
     )
   }
 
-  def getTopDeparture(n: Int): List[OutputMessage] = {
+  def getTopDeparture(flightReceived: DataFrame, n: Int): List[OutputMessage] = {
     flightReceived
       .groupBy($"airportDeparture.codeAirport".as("code"))
       .count()
@@ -34,7 +35,7 @@ object Aggregation extends SparkSessionWrapper {
       .toList
   }
 
-  def getTopArrival(n: Int): List[OutputMessage] = {
+  def getTopArrival(flightReceived: DataFrame, n: Int): List[OutputMessage] = {
     flightReceived
       .groupBy($"airportArrival.codeAirport".as("code"))
       .count()
@@ -45,7 +46,7 @@ object Aggregation extends SparkSessionWrapper {
       .toList
   }
 
-  def getTopAirline(n: Int): List[OutputMessage] = {
+  def getTopAirline(flightReceived: DataFrame, n: Int): List[OutputMessage] = {
     flightReceived
       .groupBy($"airline.nameAirline".as("name"))
       .count()
@@ -56,7 +57,7 @@ object Aggregation extends SparkSessionWrapper {
       .toList
   }
 
-  def getTopSpeed(n: Int): List[OutputMessage] = {
+  def getTopSpeed(flightReceived: DataFrame, n: Int): List[OutputMessage] = {
     flightReceived
       .select($"icaoNumber".as("code"), $"speed".cast(IntegerType))
       .sort($"speed".desc)

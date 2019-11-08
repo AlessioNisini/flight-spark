@@ -1,7 +1,10 @@
 package flightstream.model
 
+import org.apache.spark.sql.DataFrame
 import spray.json._
 
+final case class RawData(flight: DataFrame, airport: DataFrame, airline: DataFrame, airplane: DataFrame)
+final case class RawPrefixedData(flight: DataFrame, departure: DataFrame, arrival: DataFrame, airline: DataFrame, airplane: DataFrame)
 final case class FlightRequest(requestType: String, limit: Int)
 
 sealed trait OutputMessage extends Product

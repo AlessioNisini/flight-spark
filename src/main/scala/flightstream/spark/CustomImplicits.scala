@@ -19,7 +19,7 @@ object CustomImplicits {
 
   class ReadAndLoadJson(spark: SparkSession) {
     def readAndLoadJson(path: String): DataFrame =
-      spark.read.format("json").option("multiLine", true).load(s"src/main/resources/flightstream/$path")
+      spark.read.format("json").option("multiLine", true).load(path)
   }
 
   implicit def removeColumnPrefix(col: Column): RemovePrefix = new RemovePrefix(col, '_')

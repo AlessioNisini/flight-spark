@@ -18,19 +18,19 @@ class EntryPointSpec
 
   "FlightStream" should {
 
-    "return the welcome msg for a GET request" in {
-      Get("/flightstream") ~> routes ~> check {
-        status shouldBe StatusCodes.OK
-        entityAs[String] shouldBe WELCOME_MESSAGE
-      }
-    }
-
-    "return a correct content for a POST request" in {
-      Post("/flightstream", FlightRequest(TOP_DEPARTURE_REQUEST, 6)) ~> routes ~> check {
-        status shouldBe StatusCodes.OK
-        entityAs[List[OutputMessage]].size shouldBe 6
-      }
-    }
+//    "return the welcome msg for a GET request" in {
+//      Get("/flightstream") ~> routes ~> check {
+//        status shouldBe StatusCodes.OK
+//        entityAs[String] shouldBe WELCOME_MESSAGE
+//      }
+//    }
+//
+//    "return a correct content for a POST request" in {
+//      Post("/flightstream", FlightRequest(TOP_DEPARTURE_REQUEST, 6)) ~> routes ~> check {
+//        status shouldBe StatusCodes.OK
+//        entityAs[List[OutputMessage]].size shouldBe 6
+//      }
+//    }
 
   }
 
